@@ -10,7 +10,7 @@ current_state = None
 
 @app.route("/parameter_entry",methods=["GET","POST"])
 def set_custom_parameters():
-    global current_state    
+    global current_state, telemetry_history, alert_history 
     if request.method == "POST":
             current_state = {
                 "vehicle_id": int(request.form["vehicle_id"]),
@@ -18,13 +18,13 @@ def set_custom_parameters():
                 "engine_temperature": float(request.form["engine_temperature"]),
                 "oil_quality_index": int(request.form["oil_quality_index"])
             }
-            return render_template("dashboard.html", telemetry_list=telemetry_history)
+            return render_template("dashboard.html")
 
 
 
 @app.route("/",methods=["GET","POST"])
 def init_mode_selection():
-    global current_state
+    global current_state, telemetry_history, alert_history
     if request.method=="POST":
         mode = request.form.get("mode")
         telemetry_history.clear()
@@ -33,29 +33,25 @@ def init_mode_selection():
             return render_template("model_parameters.html")
         else:
             current_state = initial_telemetry.copy()
-            return render_template("dashboard.html", telemetry_list=telemetry_history)
+            return render_template("dashboard.html")
 
     return render_template("index.html")
 
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
     global current_state
+    issue_flag=0
     # Generate ONE telemetry sample per request
     if current_state:
         tel = generate_telemetry(current_state)
         issue_flag = analyse(tel)
         current_state = tel
 
-        if issue_flag == 1:
-            return render_template(
-                "alert_dashboard.html",
-                telemetry_list=telemetry_history,
-                alert_history=alert_history
-            )
-
     return render_template(
         "dashboard.html",
-        telemetry_list=telemetry_history
+        telemetry_list=telemetry_history,
+        alert_history=alert_history,
+        issue_flag=issue_flag
     )
 
 
