@@ -10,6 +10,32 @@
     <nav>
         <a href="/">Back</a>
     </nav>
+    <div class="alerts">
+        {% if alert_history!= []%}
+        <table>
+            <thead>
+                <tr>
+                    <th>Time stamp</th>
+                    <th>Severity</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for alert in alert_history|reverse %}
+            <tr>
+                {% if loop.first %}
+                <td rowspan="{{ alert_history|length }}">{{ alert[0] }}</td>
+                {% endif %}
+                <td>{{ alert[1] }}</td>
+                <td>{{ alert[2] }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+        
+
+    </div>
     <div>
         <table>
             <thead>
