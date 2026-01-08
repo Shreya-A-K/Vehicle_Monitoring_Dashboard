@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <nav>
+        <a href="/">Back</a>
+    </nav>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Speed</th>
+                    <th>Engine Temperature</th>
+                    <th>Oil Quality Index</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tel in telemetry_list%}
+                <tr>
+                    <td>{{tel["timestamp"]}}</td>
+                    <td>{{tel["speed"]}}</td>
+                    <td>{{tel["engine_temperature"]}}</td>
+                    <td>{{tel["oil_quality_index"]}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        
+        </table>
+    </div>
+    
+</body>
+</html>
